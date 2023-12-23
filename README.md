@@ -5,8 +5,11 @@
 
 express@^4.18.2
 @babel/runtime@^7.23.6
+// async-exit-hook@^2.0.1
+http-status-codes@^2.3.0
 mongodb@^6.3.0
 joi@^17.11.0
+
 
 // dev deps
 @babel/cli@^7.23.4
