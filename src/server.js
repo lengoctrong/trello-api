@@ -4,6 +4,7 @@ import env from '~/config/environment.js'
 import db from '~/config/mongodb'
 import errorMiddleware from '~/middlewares/error'
 import routes from '~/routes/v1'
+import { slugify } from './utils/formatters'
 
 const server = {
   connect() {
@@ -32,11 +33,3 @@ const server = {
     process.exit(0)
   }
 })()
-
-const mode = 'prod'
-
-const resErr = {
-  [mode === 'dev' && 'stack']: 'stackValue'
-}
-
-console.log(resErr)
