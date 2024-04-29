@@ -1,7 +1,7 @@
 import { MongoClient, ServerApiVersion } from 'mongodb'
-import { env } from './environment'
+import env from './environment'
 
-const client = new MongoClient(env.MONGODB_URI, {
+const mongoClient = new MongoClient(env.MONGODB_URI, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
@@ -9,23 +9,23 @@ const client = new MongoClient(env.MONGODB_URI, {
   }
 })
 
-let mongoClient = null
+let client = null
 
 const connect = async () => {
-  await client.connect()
-  mongoClient = client.db(env.DATABASE_NAME)
+  await mongoClient.connect()
+  client = mongoClient.db(env.DATABASE_NAME)
 }
 
 const get = () => {
-  if (!mongoClient) return
-  return mongoClient
+  if (!client) return
+  return client
 }
 
 const close = async () => {
-  await mongoClient.close()
+  await client.close()
 }
 
-export const db = {
+export default {
   connect,
   get,
   close
