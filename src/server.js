@@ -32,3 +32,11 @@ const server = {
     process.exit(0)
   }
 })()
+
+const mode = 'prod'
+
+const resErr = {
+  [mode === 'dev' && 'stack']: 'stackValue'
+}
+
+console.log(resErr)

@@ -13,10 +13,8 @@ export default (err, req, res, next) => {
   const resErr = {
     statusCode,
     message,
-    [env.BUILD_MODE === 'dev' && 'stack']: stack
+    ...(env.BUILD_MODE === 'dev' && { stack })
   }
-
-  if (env.BUILD_MODE !== 'dev') delete resErr.stack
 
   res.status(resErr.statusCode).json(resErr)
 }
