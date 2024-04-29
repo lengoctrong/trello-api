@@ -20,7 +20,7 @@ const collectionSchema = Joi.object({
 
 const validate = async (data) => {
   try {
-    return await collectionSchema.validateAsync(data.body, {
+    return await collectionSchema.validateAsync(data, {
       abortEarly: false
     })
   } catch (err) {
@@ -30,8 +30,10 @@ const validate = async (data) => {
 
 const create = async (doc) => {
   try {
-    const result = await db.get().collection(collectionName).insertOne(doc)
-    return result
+    return await db
+      .get()
+      .collection(collectionName)
+      .insertOne(await validate(doc))
   } catch (err) {
     throw new Error(err)
   }
@@ -39,7 +41,10 @@ const create = async (doc) => {
 
 const findOneById = async (id) => {
   try {
-    return await db.get().collection(collectionName).findOne({ _id: id })
+    return await db
+      .get()
+      .collection(collectionName)
+      .findOne({ _id: ObjectId.isValid(id) ? new ObjectId(id) : id })
   } catch (err) {
     throw new Error(err)
   }
