@@ -2,6 +2,7 @@
 import express from 'express'
 import env from '~/config/environment.js'
 import db from '~/config/mongodb'
+import errorMiddleware from '~/middlewares/error'
 import routes from '~/routes/v1'
 
 const server = {
@@ -10,6 +11,7 @@ const server = {
 
     app.use(express.json())
     app.use('/v1', routes)
+    app.use(errorMiddleware)
 
     app.listen(env.LOCAL_PORT, () => {
       console.log(
