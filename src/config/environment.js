@@ -1,6 +1,6 @@
 import 'dotenv/config'
 
-export const env = {
+export default {
   MONGODB_URI: process.env.MONGODB_URI,
   DATABASE_NAME: process.env.DATABASE_NAME,
   LOCAL_HOST: process.env.LOCAL_HOST,
