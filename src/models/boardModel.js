@@ -5,6 +5,9 @@ import db from '~/config/mongodb'
 import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators'
 import cardModel from './cardModel'
 import columnModel from './columnModel'
+
+const INVALID_FIELDS = ['_id', 'createdAt', 'updatedAt']
+
 const collectionName = 'boards'
 
 const collectionSchema = Joi.object({
@@ -28,6 +31,15 @@ const validate = async (data) => {
   } catch (err) {
     throw new Error(err)
   }
+}
+
+const extractBoardData = (data) => {
+  // remove invalid fields
+  Object.keys(data).forEach((fieldName) => {
+    if (INVALID_FIELDS.includes(fieldName)) {
+      delete data[fieldName]
+    }
+  })
 }
 
 const create = async (doc) => {
@@ -90,7 +102,7 @@ const getDetails = async (id) => {
 
 const pushColumnOrderIds = async (column) => {
   try {
-    const result = await db
+    return await db
       .get()
       .collection(collectionName)
       .findOneAndUpdate(
@@ -106,8 +118,28 @@ const pushColumnOrderIds = async (column) => {
           returnDocument: 'after'
         }
       )
+  } catch (err) {
+    throw new Error(err)
+  }
+}
 
-    return result.value
+const update = async (boardId, updatedData) => {
+  try {
+    extractBoardData(updatedData)
+    return await db
+      .get()
+      .collection(collectionName)
+      .findOneAndUpdate(
+        {
+          _id: new ObjectId(boardId)
+        },
+        {
+          $set: updatedData
+        },
+        {
+          returnDocument: 'after'
+        }
+      )
   } catch (err) {
     throw new Error(err)
   }
@@ -117,6 +149,7 @@ export default {
   collectionName,
   collectionSchema,
   create,
+  update,
   findOneById,
   getDetails,
   pushColumnOrderIds

@@ -58,7 +58,7 @@ const findOneById = async (id) => {
 
 const pushCardOrderIds = async (card) => {
   try {
-    const result = await db
+    return await db
       .get()
       .collection(collectionName)
       .findOneAndUpdate(
@@ -74,8 +74,6 @@ const pushCardOrderIds = async (card) => {
           returnDocument: 'after'
         }
       )
-
-    return result.value
   } catch (err) {
     throw new Error(err)
   }

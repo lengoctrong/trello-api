@@ -3,6 +3,7 @@ import { cloneDeep } from 'lodash'
 import boardModel from '~/models/boardModel'
 import ApiError from '~/utils/ApiError'
 import { slugify } from '~/utils/formatters'
+
 const create = async (data) => {
   try {
     const board = {
@@ -18,25 +19,42 @@ const create = async (data) => {
   }
 }
 
-const getDetails = async (id) => {
-  const board = await boardModel.getDetails(id)
-  if (!board) {
-    throw new ApiError(StatusCodes.NOT_FOUND, 'Board not found')
+const update = async (boardId, data) => {
+  try {
+    const updatedData = {
+      ...data,
+      updatedAt: Date.now()
+    }
+    return await boardModel.update(boardId, updatedData)
+  } catch (err) {
+    throw err
   }
+}
 
-  const returnedBoard = cloneDeep(board)
-  returnedBoard.columns.forEach((column) => {
-    column.cards = returnedBoard.cards.filter(
-      (card) => card.columnId.toString() === column._id.toString()
-    )
-  })
+const getDetails = async (id) => {
+  try {
+    const board = await boardModel.getDetails(id)
+    if (!board) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'Board not found')
+    }
 
-  delete returnedBoard.cards
+    const returnedBoard = cloneDeep(board)
+    returnedBoard.columns.forEach((column) => {
+      column.cards = returnedBoard.cards.filter(
+        (card) => card.columnId.toString() === column._id.toString()
+      )
+    })
 
-  return returnedBoard
+    delete returnedBoard.cards
+
+    return returnedBoard
+  } catch (err) {
+    throw err
+  }
 }
 
 export default {
   create,
+  update,
   getDetails
 }
