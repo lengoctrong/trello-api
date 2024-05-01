@@ -13,6 +13,7 @@ const create = async (req, res, next) => {
 const getDetails = async (req, res, next) => {
   try {
     const result = await boardService.getDetails(req.params.id)
+    console.log('result', result)
     res.status(StatusCodes.OK).json(result)
   } catch (err) {
     next(err)
