@@ -1,16 +1,17 @@
 /* eslint-disable no-console */
+import cors from 'cors'
 import express from 'express'
 import env from '~/config/environment.js'
 import db from '~/config/mongodb'
 import errorMiddleware from '~/middlewares/error'
 import routes from '~/routes/v1'
-import { slugify } from './utils/formatters'
-
 const server = {
   connect() {
     const app = express()
 
+    app.use(cors())
     app.use(express.json())
+
     app.use('/v1', routes)
     app.use(errorMiddleware)
 
