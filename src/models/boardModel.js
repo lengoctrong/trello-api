@@ -50,9 +50,21 @@ const findOneById = async (id) => {
   }
 }
 
+const getDetails = async (id) => {
+  try {
+    return await db
+      .get()
+      .collection(collectionName)
+      .findOne({ _id: ObjectId.isValid(id) ? new ObjectId(id) : id })
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
 export default {
   collectionName,
   collectionSchema,
   create,
-  findOneById
+  findOneById,
+  getDetails
 }
