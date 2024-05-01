@@ -4,12 +4,18 @@ import boardModel from '~/models/boardModel'
 import ApiError from '~/utils/ApiError'
 import { slugify } from '~/utils/formatters'
 const create = async (data) => {
-  const board = {
-    ...data,
-    slug: slugify(data.title)
+  try {
+    const board = {
+      ...data,
+      slug: slugify(data.title)
+    }
+    const doc = await boardModel.create(board)
+    const returnedBoard = await boardModel.findOneById(doc.insertedId)
+
+    return returnedBoard
+  } catch (err) {
+    throw err
   }
-  const doc = await boardModel.create(board)
-  return await boardModel.findOneById(doc.insertedId)
 }
 
 const getDetails = async (id) => {
@@ -18,16 +24,16 @@ const getDetails = async (id) => {
     throw new ApiError(StatusCodes.NOT_FOUND, 'Board not found')
   }
 
-  const newBoard = cloneDeep(board)
-  newBoard.columns.forEach((column) => {
-    column.cards = newBoard.cards.filter(
+  const returnedBoard = cloneDeep(board)
+  returnedBoard.columns.forEach((column) => {
+    column.cards = returnedBoard.cards.filter(
       (card) => card.columnId.toString() === column._id.toString()
     )
   })
 
-  delete newBoard.cards
+  delete returnedBoard.cards
 
-  return newBoard
+  return returnedBoard
 }
 
 export default {

@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import _ from 'lodash'
 import { ObjectId } from 'mongodb'
 import db from '~/config/mongodb'
 import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators'
@@ -7,13 +8,13 @@ import columnModel from './columnModel'
 const collectionName = 'boards'
 
 const collectionSchema = Joi.object({
-  title: Joi.string().required().min(3).max(50).trim().strict(),
-  slug: Joi.string().required().min(3).trim().strict(),
+  title: Joi.string().trim().strict(),
+  slug: Joi.string().trim().strict(),
 
   columnOrderIds: Joi.array()
     .items(Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE))
     .default([]),
-
+  columns: Joi.array().items(Joi.object()).default([]),
   createdAt: Joi.date().timestamp('javascript').default(Date.now),
   updatedAt: Joi.date().timestamp('javascript').default(null),
   _destroy: Joi.boolean().default(false)
@@ -87,10 +88,36 @@ const getDetails = async (id) => {
   }
 }
 
+const pushColumnOrderIds = async (column) => {
+  try {
+    const result = await db
+      .get()
+      .collection(collectionName)
+      .findOneAndUpdate(
+        {
+          _id: new ObjectId(column.boardId)
+        },
+        {
+          $push: {
+            columnOrderIds: new ObjectId(column._id)
+          }
+        },
+        {
+          returnDocument: 'after'
+        }
+      )
+
+    return result.value
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
 export default {
   collectionName,
   collectionSchema,
   create,
   findOneById,
-  getDetails
+  getDetails,
+  pushColumnOrderIds
 }

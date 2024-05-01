@@ -1,9 +1,9 @@
 const { StatusCodes } = require('http-status-codes')
-import boardService from '~/services/boardService'
+import columnService from '~/services/columnService'
 
 const create = async (req, res, next) => {
   try {
-    const result = await boardService.create(req.body)
+    const result = await columnService.create(req.body)
     res.status(StatusCodes.CREATED).json(result)
   } catch (err) {
     next(err)
@@ -12,7 +12,7 @@ const create = async (req, res, next) => {
 
 const getDetails = async (req, res, next) => {
   try {
-    const result = await boardService.getDetails(req.params.id)
+    const result = await columnService.getDetails(req.params.id)
     res.status(StatusCodes.OK).json(result)
   } catch (err) {
     next(err)
