@@ -10,6 +10,6 @@ router
   })
   .post(boardValidation.create, boardController.create)
 
-router.route('/:id').get(boardController.getDetails).put()
+router.route('/:id').get(boardController.getDetails)
 
 export default router

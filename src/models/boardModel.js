@@ -2,7 +2,8 @@ import Joi from 'joi'
 import { ObjectId } from 'mongodb'
 import db from '~/config/mongodb'
 import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators'
-
+import cardModel from './cardModel'
+import columnModel from './columnModel'
 const collectionName = 'boards'
 
 const collectionSchema = Joi.object({
@@ -52,10 +53,35 @@ const findOneById = async (id) => {
 
 const getDetails = async (id) => {
   try {
-    return await db
+    const [result] = await db
       .get()
       .collection(collectionName)
-      .findOne({ _id: ObjectId.isValid(id) ? new ObjectId(id) : id })
+      .aggregate([
+        {
+          $match: {
+            _id: new ObjectId(id),
+            _destroy: false
+          }
+        },
+        {
+          $lookup: {
+            from: columnModel.collectionName,
+            localField: '_id',
+            foreignField: 'boardId',
+            as: 'columns'
+          }
+        },
+        {
+          $lookup: {
+            from: cardModel.collectionName,
+            localField: '_id',
+            foreignField: 'boardId',
+            as: 'cards'
+          }
+        }
+      ])
+      .toArray()
+    return result || null
   } catch (err) {
     throw new Error(err)
   }
