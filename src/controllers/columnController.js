@@ -10,6 +10,15 @@ const create = async (req, res, next) => {
   }
 }
 
+const update = async (req, res, next) => {
+  try {
+    const result = await columnService.update(req.params.id, req.body)
+    res.status(StatusCodes.OK).json(result)
+  } catch (err) {
+    next(err)
+  }
+}
+
 const getDetails = async (req, res, next) => {
   try {
     const result = await columnService.getDetails(req.params.id)
@@ -21,5 +30,6 @@ const getDetails = async (req, res, next) => {
 
 export default {
   create,
+  update,
   getDetails
 }

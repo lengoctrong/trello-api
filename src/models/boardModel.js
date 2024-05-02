@@ -1,12 +1,13 @@
 import Joi from 'joi'
-import _ from 'lodash'
 import { ObjectId } from 'mongodb'
 import db from '~/config/mongodb'
-import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators'
+import {
+  OBJECT_ID_RULE,
+  OBJECT_ID_RULE_MESSAGE,
+  extractData
+} from '~/utils/validators'
 import cardModel from './cardModel'
 import columnModel from './columnModel'
-
-const INVALID_FIELDS = ['_id', 'createdAt', 'updatedAt']
 
 const collectionName = 'boards'
 
@@ -23,6 +24,8 @@ const collectionSchema = Joi.object({
   _destroy: Joi.boolean().default(false)
 })
 
+const invalidFields = ['_id', 'createdAt']
+
 const validate = async (data) => {
   try {
     return await collectionSchema.validateAsync(data, {
@@ -31,15 +34,6 @@ const validate = async (data) => {
   } catch (err) {
     throw new Error(err)
   }
-}
-
-const extractBoardData = (data) => {
-  // remove invalid fields
-  Object.keys(data).forEach((fieldName) => {
-    if (INVALID_FIELDS.includes(fieldName)) {
-      delete data[fieldName]
-    }
-  })
 }
 
 const create = async (doc) => {
@@ -125,7 +119,7 @@ const pushColumnOrderIds = async (column) => {
 
 const update = async (boardId, updatedData) => {
   try {
-    extractBoardData(updatedData)
+    extractData(updatedData, invalidFields)
     return await db
       .get()
       .collection(collectionName)
