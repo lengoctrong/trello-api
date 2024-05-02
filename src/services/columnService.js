@@ -1,5 +1,6 @@
 import boardModel from '~/models/boardModel'
 import columnModel from '~/models/columnModel'
+
 const create = async (data) => {
   try {
     const column = {
@@ -20,6 +21,19 @@ const create = async (data) => {
   }
 }
 
+const update = async (columnId, data) => {
+  try {
+    const updatedData = {
+      ...data,
+      updatedAt: Date.now()
+    }
+    return await columnModel.update(columnId, updatedData)
+  } catch (err) {
+    throw err
+  }
+}
+
 export default {
-  create
+  create,
+  update
 }
