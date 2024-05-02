@@ -55,6 +55,14 @@ const create = async (doc) => {
 const update = async (columnId, updatedData) => {
   try {
     extractData(updatedData, invalidFields)
+
+    // convert id to ObjectId
+    if (updatedData.cardOrderIds) {
+      updatedData.cardOrderIds = updatedData.cardOrderIds.map(
+        (cardId) => new ObjectId(cardId)
+      )
+    }
+
     return await db
       .get()
       .collection(collectionName)

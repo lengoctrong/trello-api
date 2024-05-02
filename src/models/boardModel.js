@@ -47,6 +47,35 @@ const create = async (doc) => {
   }
 }
 
+const update = async (boardId, updatedData) => {
+  try {
+    extractData(updatedData, invalidFields)
+
+    if (updatedData.columnOrderIds) {
+      updatedData.columnOrderIds = updatedData.columnOrderIds.map(
+        (columnId) => new ObjectId(columnId)
+      )
+    }
+
+    return await db
+      .get()
+      .collection(collectionName)
+      .findOneAndUpdate(
+        {
+          _id: new ObjectId(boardId)
+        },
+        {
+          $set: updatedData
+        },
+        {
+          returnDocument: 'after'
+        }
+      )
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
 const findOneById = async (id) => {
   try {
     return await db
@@ -107,28 +136,6 @@ const pushColumnOrderIds = async (column) => {
           $push: {
             columnOrderIds: new ObjectId(column._id)
           }
-        },
-        {
-          returnDocument: 'after'
-        }
-      )
-  } catch (err) {
-    throw new Error(err)
-  }
-}
-
-const update = async (boardId, updatedData) => {
-  try {
-    extractData(updatedData, invalidFields)
-    return await db
-      .get()
-      .collection(collectionName)
-      .findOneAndUpdate(
-        {
-          _id: new ObjectId(boardId)
-        },
-        {
-          $set: updatedData
         },
         {
           returnDocument: 'after'

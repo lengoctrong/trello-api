@@ -1,8 +1,14 @@
 import Joi from 'joi'
 import { ObjectId } from 'mongodb'
 import db from '~/config/mongodb'
-import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators'
+import {
+  OBJECT_ID_RULE,
+  OBJECT_ID_RULE_MESSAGE,
+  extractData
+} from '~/utils/validators'
+
 const collectionName = 'cards'
+
 const collectionSchema = Joi.object({
   boardId: Joi.string()
     .required()
@@ -20,6 +26,8 @@ const collectionSchema = Joi.object({
   updatedAt: Joi.date().timestamp('javascript').default(null),
   _destroy: Joi.boolean().default(false)
 })
+
+const invalidFields = ['_id', 'boardId', 'createdAt']
 
 const validate = async (data) => {
   try {
@@ -47,6 +55,34 @@ const create = async (doc) => {
   }
 }
 
+const update = async (cardId, updatedData) => {
+  try {
+    extractData(updatedData, invalidFields)
+
+    // convert id to ObjectId
+    if (updatedData.columnId) {
+      updatedData.columnId = new ObjectId(updatedData.columnId)
+    }
+
+    return await db
+      .get()
+      .collection(collectionName)
+      .findOneAndUpdate(
+        {
+          _id: new ObjectId(cardId)
+        },
+        {
+          $set: updatedData
+        },
+        {
+          returnDocument: 'after'
+        }
+      )
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
 const findOneById = async (id) => {
   try {
     return await db
@@ -62,5 +98,6 @@ export default {
   collectionName,
   collectionSchema,
   create,
+  update,
   findOneById
 }
