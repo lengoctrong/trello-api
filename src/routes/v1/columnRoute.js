@@ -5,6 +5,9 @@ import columnValidation from '~/validations/columnValidation'
 const router = express.Router()
 router.route('/').post(columnValidation.create, columnController.create)
 
-router.route('/:id').put(columnValidation.update, columnController.update)
+router
+  .route('/:id')
+  .put(columnValidation.update, columnController.update)
+  .delete(columnValidation.deleteItem, columnController.deleteItem)
 
 export default router

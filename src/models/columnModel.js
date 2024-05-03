@@ -93,6 +93,17 @@ const findOneById = async (id) => {
   }
 }
 
+const deleteOneById = async (id) => {
+  try {
+    return await db
+      .get()
+      .collection(collectionName)
+      .deleteOne({ _id: ObjectId.isValid(id) ? new ObjectId(id) : id })
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
 const pushCardOrderIds = async (card) => {
   try {
     return await db
@@ -122,5 +133,6 @@ export default {
   create,
   update,
   findOneById,
+  deleteOneById,
   pushCardOrderIds
 }
