@@ -1,18 +1,9 @@
-// import express from 'express'
-// import { StatusCodes } from 'http-status-codes'
-// import userController from '~/controllers/userController'
-// import userValidation from '~/validations/userValidation'
-// const router = express.Router()
-// router
-//   .route('/')
-//   .get((req, res) => {
-//     res.status(StatusCodes.OK).json({ message: '[GET] user' })
-//   })
-//   .post(userValidation.create, userController.create)
+import express from 'express'
+import userController from '~/controllers/userController'
+import userValidation from '~/validations/userValidation'
 
-// router
-//   .route('/:id')
-//   .get(userController.getDetails)
-//   .put(userValidation.update, userController.update)
+const router = express.Router()
 
-// export default router
+router.route('/').post(userValidation.create, userController.create)
+
+export default router
