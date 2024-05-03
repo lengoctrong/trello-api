@@ -1,4 +1,5 @@
 import boardModel from '~/models/boardModel'
+import cardModel from '~/models/cardModel'
 import columnModel from '~/models/columnModel'
 
 const create = async (data) => {
@@ -33,7 +34,18 @@ const update = async (columnId, data) => {
   }
 }
 
+const deleteItem = async (columnId) => {
+  try {
+    await columnModel.deleteOneById(columnId)
+    await cardModel.deleteManyByColumnId(columnId)
+    return { deleteResult: 'Cột và tất cả các thẻ trong cột đã bị xóa' }
+  } catch (err) {
+    throw err
+  }
+}
+
 export default {
   create,
-  update
+  update,
+  deleteItem
 }

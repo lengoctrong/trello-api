@@ -94,10 +94,24 @@ const findOneById = async (id) => {
   }
 }
 
+const deleteManyByColumnId = async (columnId) => {
+  try {
+    return await db
+      .get()
+      .collection(collectionName)
+      .deleteMany({
+        columnId: ObjectId.isValid(columnId) ? new ObjectId(columnId) : columnId
+      })
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
 export default {
   collectionName,
   collectionSchema,
   create,
   update,
-  findOneById
+  findOneById,
+  deleteManyByColumnId
 }

@@ -19,6 +19,15 @@ const update = async (req, res, next) => {
   }
 }
 
+const deleteItem = async (req, res, next) => {
+  try {
+    const result = await columnService.deleteItem(req.params.id)
+    res.status(StatusCodes.OK).json(result)
+  } catch (err) {
+    next(err)
+  }
+}
+
 const getDetails = async (req, res, next) => {
   try {
     const result = await columnService.getDetails(req.params.id)
@@ -31,5 +40,6 @@ const getDetails = async (req, res, next) => {
 export default {
   create,
   update,
+  deleteItem,
   getDetails
 }
