@@ -146,6 +146,29 @@ const pushColumnOrderIds = async (column) => {
   }
 }
 
+const pullColumnOrderIds = async (column) => {
+  try {
+    return await db
+      .get()
+      .collection(collectionName)
+      .findOneAndUpdate(
+        {
+          _id: new ObjectId(column.boardId)
+        },
+        {
+          $pull: {
+            columnOrderIds: new ObjectId(column._id)
+          }
+        },
+        {
+          returnDocument: 'after'
+        }
+      )
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
 export default {
   collectionName,
   collectionSchema,
@@ -153,5 +176,6 @@ export default {
   update,
   findOneById,
   getDetails,
-  pushColumnOrderIds
+  pushColumnOrderIds,
+  pullColumnOrderIds
 }
