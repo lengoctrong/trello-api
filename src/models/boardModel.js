@@ -47,6 +47,14 @@ const create = async (doc) => {
   }
 }
 
+const getAll = async () => {
+  try {
+    return await db.get().collection(collectionName).find().toArray()
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
 const update = async (boardId, updatedData) => {
   try {
     extractData(updatedData, invalidFields)
@@ -172,6 +180,7 @@ const pullColumnOrderIds = async (column) => {
 export default {
   collectionName,
   collectionSchema,
+  getAll,
   create,
   update,
   findOneById,

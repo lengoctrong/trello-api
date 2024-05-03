@@ -8,7 +8,7 @@ const create = async (req, res, next) => {
     title: Joi.string().required().trim().strict()
   })
   try {
-    await schema.validateAsync(req.body, { abortEarly: false })
+    await schema.validateAsync(req.body)
     next()
   } catch (err) {
     const customErr = new ApiError(

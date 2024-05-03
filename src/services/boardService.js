@@ -6,6 +6,19 @@ import columnModel from '~/models/columnModel'
 import ApiError from '~/utils/ApiError'
 import { slugify } from '~/utils/formatters'
 
+const getAll = async () => {
+  try {
+    const result = await boardModel.getAll()
+    if (!result) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'Boards not found')
+    }
+
+    return result
+  } catch (err) {
+    throw err
+  }
+}
+
 const create = async (data) => {
   try {
     const board = {
@@ -79,6 +92,7 @@ const moveCardOtherColumn = async (data) => {
 }
 
 export default {
+  getAll,
   create,
   update,
   getDetails,

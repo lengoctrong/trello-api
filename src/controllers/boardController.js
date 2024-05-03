@@ -1,6 +1,15 @@
 const { StatusCodes } = require('http-status-codes')
 import boardService from '~/services/boardService'
 
+const getAll = async (req, res, next) => {
+  try {
+    const result = await boardService.getAll()
+    res.status(StatusCodes.OK).json(result)
+  } catch (err) {
+    next(err)
+  }
+}
+
 const create = async (req, res, next) => {
   try {
     const result = await boardService.create(req.body)
@@ -39,6 +48,7 @@ const moveCardOtherColumn = async (req, res, next) => {
 }
 
 export default {
+  getAll,
   create,
   update,
   getDetails,
