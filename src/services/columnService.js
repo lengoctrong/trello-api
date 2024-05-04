@@ -6,22 +6,11 @@ import ApiError from '~/utils/ApiError'
 
 const create = async (data) => {
   try {
-    const storeType = data.type ?? 'create'
-    delete data.type
     const column = {
       ...data
     }
     const doc = await columnModel.create(column)
     const returnedColumn = await columnModel.findOneById(doc.insertedId)
-
-    if (storeType === 'copy') {
-      const cards = await cardModel.findManyByColumnId(returnedColumn._id)
-      const newCards = {
-        ...cards,
-        columnId: returnedColumn._id
-      }
-      return await columnModel.pushCard(newCards)
-    }
 
     if (returnedColumn) {
       returnedColumn.cards = []
