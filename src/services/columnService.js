@@ -20,11 +20,7 @@ const create = async (data) => {
         ...cards,
         columnId: returnedColumn._id
       }
-      await columnModel.update(returnedColumn._id, {
-        newCards,
-        cardOrderIds: cards.map((card) => card._id),
-        updatedAt: Date.now()
-      })
+      return await columnModel.pushCard(newCards)
     }
 
     if (returnedColumn) {

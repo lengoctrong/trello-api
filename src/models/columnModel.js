@@ -127,6 +127,28 @@ const pushCardOrderIds = async (card) => {
   }
 }
 
+const pushCard = async (card) => {
+  try {
+    return await db
+      .get()
+      .collection(collectionName)
+      .findOneAndUpdate(
+        {
+          _id: new ObjectId(card.columnId)
+        },
+        {
+          $push: {
+            cards: card
+          }
+        },
+        {
+          returnDocument: 'after'
+        }
+      )
+  } catch (err) {
+    throw new Error(err)
+  }
+}
 export default {
   collectionName,
   collectionSchema,
@@ -134,5 +156,6 @@ export default {
   update,
   findOneById,
   deleteOneById,
-  pushCardOrderIds
+  pushCardOrderIds,
+  pushCard
 }
