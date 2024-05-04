@@ -10,6 +10,30 @@ const create = async (req, res, next) => {
   }
 }
 
+const getAll = async (req, res, next) => {
+  try {
+    const { columnId } = req.query
+    const result = await cardService.getAll(columnId)
+    res.status(StatusCodes.OK).json(result)
+  } catch (err) {
+    next(err)
+  }
+}
+
+const updateAllCardsColumnId = async (req, res, next) => {
+  try {
+    const result = await cardService.updateAllCardsColumnId(
+      req.params.id,
+      req.body
+    )
+    res.status(StatusCodes.OK).json(result)
+  } catch (err) {
+    next(err)
+  }
+}
+
 export default {
-  create
+  create,
+  getAll,
+  updateAllCardsColumnId
 }

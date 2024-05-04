@@ -1,4 +1,5 @@
 import { StatusCodes } from 'http-status-codes'
+import { ObjectId } from 'mongodb'
 import boardModel from '~/models/boardModel'
 import cardModel from '~/models/cardModel'
 import columnModel from '~/models/columnModel'
@@ -38,13 +39,13 @@ const update = async (columnId, data) => {
 
 const deleteItem = async (columnId) => {
   try {
-    const column = await columnModel.findOneById(columnId)
-    if (!column) {
+    const columnTarget = await columnModel.findOneById(columnId)
+    if (!columnTarget) {
       throw new ApiError(StatusCodes.NOT_FOUND, 'Column not found')
     }
     await columnModel.deleteOneById(columnId)
     await cardModel.deleteManyByColumnId(columnId)
-    await boardModel.pullColumnOrderIds(column)
+    await boardModel.pullColumnOrderIds(columnTarget)
     return { deleteResult: 'Cột và tất cả các thẻ trong cột đã bị xóa' }
   } catch (err) {
     throw err

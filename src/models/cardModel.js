@@ -94,6 +94,20 @@ const findOneById = async (id) => {
   }
 }
 
+const findManyByColumnId = async (columnId) => {
+  try {
+    return await db
+      .get()
+      .collection(collectionName)
+      .find({
+        columnId: ObjectId.isValid(columnId) ? new ObjectId(columnId) : columnId
+      })
+      .toArray()
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
 const deleteManyByColumnId = async (columnId) => {
   try {
     return await db
@@ -107,11 +121,33 @@ const deleteManyByColumnId = async (columnId) => {
   }
 }
 
+const updateManyByColumnId = async (columnId, updatedData) => {
+  try {
+    return await db
+      .get()
+      .collection(collectionName)
+      .updateMany(
+        {
+          columnId: ObjectId.isValid(columnId)
+            ? new ObjectId(columnId)
+            : columnId
+        },
+        {
+          $set: updatedData
+        }
+      )
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
 export default {
   collectionName,
   collectionSchema,
   create,
   update,
   findOneById,
-  deleteManyByColumnId
+  deleteManyByColumnId,
+  findManyByColumnId,
+  updateManyByColumnId
 }
