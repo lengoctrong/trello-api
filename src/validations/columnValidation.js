@@ -9,7 +9,8 @@ const create = async (req, res, next) => {
       .required()
       .pattern(OBJECT_ID_RULE)
       .message(OBJECT_ID_RULE_MESSAGE),
-    title: Joi.string().required().trim().strict()
+    title: Joi.string().required().trim().strict(),
+    type: Joi.string().valid('copy', 'create').required()
   })
   try {
     await schema.validateAsync(req.body, { abortEarly: false })
