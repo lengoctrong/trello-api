@@ -44,7 +44,7 @@ const update = async (req, res, next) => {
   }
 }
 
-const moveCardOtherColumn = async (req, res, next) => {
+const moveCardToDifferentColumn = async (req, res, next) => {
   const schema = Joi.object({
     currentCardId: Joi.string()
       .required()
@@ -86,5 +86,5 @@ const moveCardOtherColumn = async (req, res, next) => {
 export default {
   create,
   update,
-  moveCardOtherColumn
+  moveCardToDifferentColumn
 }

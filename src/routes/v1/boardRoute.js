@@ -14,6 +14,9 @@ router
 
 router
   .route('/supports/moving_card')
-  .put(boardValidation.moveCardOtherColumn, boardController.moveCardOtherColumn)
+  .put(
+    boardValidation.moveCardToDifferentColumn,
+    boardController.moveCardToDifferentColumn
+  )
 
 export default router

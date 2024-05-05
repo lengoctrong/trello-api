@@ -68,7 +68,7 @@ const getDetails = async (id) => {
   }
 }
 
-const moveCardOtherColumn = async (data) => {
+const moveCardToDifferentColumn = async (data) => {
   try {
     await columnModel.update(data.prevColumnId, {
       cardOrderIds: data.prevCardOrderIds,
@@ -96,5 +96,5 @@ export default {
   create,
   update,
   getDetails,
-  moveCardOtherColumn
+  moveCardToDifferentColumn
 }
