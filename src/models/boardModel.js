@@ -14,7 +14,7 @@ const collectionName = 'boards'
 const collectionSchema = Joi.object({
   title: Joi.string().trim().strict(),
   slug: Joi.string().trim().strict(),
-
+  description: Joi.string().required().min(3).max(256).trim().strict(),
   columnOrderIds: Joi.array()
     .items(Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE))
     .default([]),
