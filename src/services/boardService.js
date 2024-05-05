@@ -85,7 +85,7 @@ const moveCardToDifferentColumn = async (data) => {
       updatedAt: Date.now()
     })
 
-    return { updatedResult: 'Successfully' }
+    return { updatedResult: 'Di chuyển thẻ thành công!' }
   } catch (err) {
     throw err
   }
