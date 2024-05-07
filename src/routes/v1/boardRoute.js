@@ -11,6 +11,7 @@ router
   .route('/:id')
   .get(boardController.getDetails)
   .put(boardValidation.update, boardController.update)
+  .delete(boardValidation.deleteItem, boardController.deleteItem)
 
 router
   .route('/supports/moving_card')

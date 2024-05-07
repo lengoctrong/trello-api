@@ -14,7 +14,7 @@ const collectionName = 'boards'
 const collectionSchema = Joi.object({
   title: Joi.string().trim().strict(),
   slug: Joi.string().trim().strict(),
-  description: Joi.string().required().min(3).max(256).trim().strict(),
+  description: Joi.string().min(3).max(256).trim().strict(),
   columnOrderIds: Joi.array()
     .items(Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE))
     .default([]),
@@ -84,6 +84,17 @@ const update = async (boardId, updatedData) => {
   }
 }
 
+const deleteOneById = async (id) => {
+  try {
+    return await db
+      .get()
+      .collection(collectionName)
+      .deleteOne({ _id: ObjectId.isValid(id) ? new ObjectId(id) : id })
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
 const findOneById = async (id) => {
   try {
     return await db
@@ -103,8 +114,8 @@ const getDetails = async (id) => {
       .aggregate([
         {
           $match: {
-            _id: new ObjectId(id),
-            _destroy: false
+            _id: new ObjectId(id)
+            // _destroy: false
           }
         },
         {
@@ -183,6 +194,7 @@ export default {
   getAll,
   create,
   update,
+  deleteOneById,
   findOneById,
   getDetails,
   pushColumnOrderIds,

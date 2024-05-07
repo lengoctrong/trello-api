@@ -19,18 +19,27 @@ const create = async (req, res, next) => {
   }
 }
 
-const getDetails = async (req, res, next) => {
+const update = async (req, res, next) => {
   try {
-    const result = await boardService.getDetails(req.params.id)
+    const result = await boardService.update(req.params.id, req.body)
     res.status(StatusCodes.OK).json(result)
   } catch (err) {
     next(err)
   }
 }
 
-const update = async (req, res, next) => {
+const deleteItem = async (req, res, next) => {
   try {
-    const result = await boardService.update(req.params.id, req.body)
+    const result = await boardService.deleteItem(req.params.id)
+    res.status(StatusCodes.OK).json(result)
+  } catch (err) {
+    next(err)
+  }
+}
+
+const getDetails = async (req, res, next) => {
+  try {
+    const result = await boardService.getDetails(req.params.id)
     res.status(StatusCodes.OK).json(result)
   } catch (err) {
     next(err)
@@ -51,6 +60,7 @@ export default {
   getAll,
   create,
   update,
+  deleteItem,
   getDetails,
   moveCardToDifferentColumn
 }

@@ -46,6 +46,20 @@ const update = async (boardId, data) => {
   }
 }
 
+const deleteItem = async (boardId) => {
+  try {
+    const boardTarget = await boardModel.findOneById(boardId)
+    if (!boardTarget) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'Board not found')
+    }
+    await boardModel.deleteOneById(boardId)
+
+    return { deleteResult: 'Xóa bảng thành công!' }
+  } catch (err) {
+    throw err
+  }
+}
+
 const getDetails = async (id) => {
   try {
     const board = await boardModel.getDetails(id)
@@ -95,6 +109,7 @@ export default {
   getAll,
   create,
   update,
+  deleteItem,
   getDetails,
   moveCardToDifferentColumn
 }
