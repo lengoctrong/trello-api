@@ -28,6 +28,26 @@ const create = async (req, res, next) => {
   }
 }
 
+const update = async (req, res, next) => {
+  const schema = Joi.object({
+    title: Joi.string().trim().strict(),
+    description: Joi.string().trim().strict()
+  })
+  try {
+    await schema.validateAsync(req.body, {
+      abortEarly: false,
+      allowUnknown: true
+    })
+    next()
+  } catch (err) {
+    const customErr = new ApiError(
+      StatusCodes.UNPROCESSABLE_ENTITY,
+      err.message
+    )
+    next(customErr)
+  }
+}
+
 const updateAllCardsColumnId = async (req, res, next) => {
   const schema = Joi.object({
     title: Joi.string().trim().strict(),
@@ -53,5 +73,6 @@ const updateAllCardsColumnId = async (req, res, next) => {
 
 export default {
   create,
+  update,
   updateAllCardsColumnId
 }

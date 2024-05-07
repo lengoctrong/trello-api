@@ -22,6 +22,18 @@ const create = async (data) => {
   }
 }
 
+const update = async (cardId, data) => {
+  try {
+    const updatedData = {
+      ...data,
+      updatedAt: Date.now()
+    }
+    return await cardModel.update(cardId, updatedData)
+  } catch (err) {
+    throw err
+  }
+}
+
 const updateAllCardsColumnId = async (columnId, data) => {
   try {
     let updatedData = {
@@ -52,6 +64,7 @@ const getAll = async (columnId) => {
 
 export default {
   create,
+  update,
   updateAllCardsColumnId,
   getAll
 }

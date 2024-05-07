@@ -10,6 +10,7 @@ router
   )
   .get(cardController.getAll)
   .post(cardValidation.create, cardController.create)
-router.route('/:id')
+
+router.route('/:id').put(cardValidation.update, cardController.update)
 
 export default router

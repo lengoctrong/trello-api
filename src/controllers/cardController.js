@@ -20,6 +20,15 @@ const getAll = async (req, res, next) => {
   }
 }
 
+const update = async (req, res, next) => {
+  try {
+    const result = await cardService.update(req.params.id, req.body)
+    res.status(StatusCodes.OK).json(result)
+  } catch (err) {
+    next(err)
+  }
+}
+
 const updateAllCardsColumnId = async (req, res, next) => {
   try {
     const result = await cardService.updateAllCardsColumnId(
@@ -34,6 +43,7 @@ const updateAllCardsColumnId = async (req, res, next) => {
 
 export default {
   create,
+  update,
   getAll,
   updateAllCardsColumnId
 }
