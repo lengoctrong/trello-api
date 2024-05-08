@@ -9,15 +9,13 @@ const create = async (data) => {
     const column = {
       ...data
     }
+
     const doc = await columnModel.create(column)
     const returnedColumn = await columnModel.findOneById(doc.insertedId)
-
     if (returnedColumn) {
       returnedColumn.cards = []
-
       await boardModel.pushColumnOrderIds(returnedColumn)
     }
-
     return returnedColumn
   } catch (err) {
     throw err

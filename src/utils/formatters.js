@@ -9,3 +9,12 @@ export const slugify = (text) => {
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
 }
+
+export const mapOrderedArr = (originArr, orderArr, key) => {
+  if (!Array.isArray(originArr)) originArr = []
+
+  const clonedArr = [...originArr]
+  return clonedArr.sort(
+    (a, b) => orderArr.indexOf(a[key]) - orderArr.indexOf(b[key])
+  )
+}
