@@ -5,12 +5,23 @@ import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators'
 
 const create = async (req, res, next) => {
   const schema = Joi.object({
+    _id: Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE),
+
     boardId: Joi.string()
       .required()
       .pattern(OBJECT_ID_RULE)
       .message(OBJECT_ID_RULE_MESSAGE),
-    title: Joi.string().required().trim().strict()
+    title: Joi.string().required().trim().strict(),
+
+    cards: Joi.array().items(Joi.object()),
+    cardOrderIds: Joi.array().items(
+      Joi.string()
+        .pattern(OBJECT_ID_RULE)
+        .message(OBJECT_ID_RULE_MESSAGE)
+        .strict()
+    )
   })
+
   try {
     await schema.validateAsync(req.body, { abortEarly: false })
     next()

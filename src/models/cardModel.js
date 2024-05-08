@@ -55,6 +55,24 @@ const create = async (doc) => {
   }
 }
 
+const createMany = async (docs) => {
+  try {
+    // validate each document in the docs array
+    const validDocs = await Promise.all(docs.map((doc) => validate(doc)))
+
+    // convert boardId and columnId to ObjectId
+    const docsToInsert = validDocs.map((doc) => ({
+      ...doc,
+      boardId: new ObjectId(doc.boardId),
+      columnId: new ObjectId(doc.columnId)
+    }))
+
+    return await db.get().collection(collectionName).insertMany(docsToInsert)
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
 const update = async (cardId, updatedData) => {
   try {
     extractData(updatedData, invalidFields)
@@ -145,6 +163,7 @@ export default {
   collectionName,
   collectionSchema,
   create,
+  createMany,
   update,
   findOneById,
   deleteManyByColumnId,
