@@ -41,9 +41,7 @@ const updateAllCardsColumnId = async (columnId, data) => {
       updatedAt: Date.now()
     }
 
-    const result = await cardModel.updateManyByColumnId(columnId, updatedData)
-
-    console.log(`${result.modifiedCount} document(s) was/were updated.`)
+    await cardModel.updateManyByColumnId(columnId, updatedData)
   } catch (err) {
     throw err
   }

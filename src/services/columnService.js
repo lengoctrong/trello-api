@@ -1,4 +1,5 @@
 import { StatusCodes } from 'http-status-codes'
+import { cloneDeep } from 'lodash'
 import boardModel from '~/models/boardModel'
 import cardModel from '~/models/cardModel'
 import columnModel from '~/models/columnModel'
@@ -34,6 +35,18 @@ const update = async (columnId, data) => {
   }
 }
 
+const getDetails = async (id) => {
+  try {
+    const result = await columnModel.findOneById(id)
+    if (!result) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'Column not found')
+    }
+    return result
+  } catch (err) {
+    throw err
+  }
+}
+
 const deleteItem = async (columnId) => {
   try {
     const columnTarget = await columnModel.findOneById(columnId)
@@ -52,5 +65,6 @@ const deleteItem = async (columnId) => {
 export default {
   create,
   update,
+  getDetails,
   deleteItem
 }

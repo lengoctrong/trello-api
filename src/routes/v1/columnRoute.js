@@ -7,6 +7,7 @@ router.route('/').post(columnValidation.create, columnController.create)
 
 router
   .route('/:id')
+  .get(columnController.getDetails)
   .put(columnValidation.update, columnController.update)
   .delete(columnValidation.deleteItem, columnController.deleteItem)
 
