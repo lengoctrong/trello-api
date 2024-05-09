@@ -10,7 +10,8 @@ const create = async (data) => {
       email,
       password,
       name: email.split('@')[0],
-      role: 'user'
+      role: 'user',
+      isLogin: true
     }
 
     const existingUser = await userModel.findUser({ email })
@@ -19,7 +20,8 @@ const create = async (data) => {
       throw new ApiError(StatusCodes.NOT_FOUND, 'Không tìm thấy người dùng!')
     }
 
-    if (type === 'login' && existingUser) return existingUser
+    if (type === 'login' && existingUser)
+      return { ...existingUser, isLogin: true }
 
     if (type === 'register' && existingUser) {
       throw new ApiError(StatusCodes.CONFLICT, 'Người dùng đã tồn tại!')
@@ -29,6 +31,18 @@ const create = async (data) => {
       const result = await userModel.create(userData)
       return await userModel.findOneById(result.insertedId)
     }
+  } catch (err) {
+    throw err
+  }
+}
+
+const update = async (userId, data) => {
+  try {
+    const updatedData = {
+      ...data,
+      updatedAt: Date.now()
+    }
+    return await userModel.update(userId, updatedData)
   } catch (err) {
     throw err
   }
@@ -48,5 +62,6 @@ const getDetails = async (id) => {
 
 export default {
   create,
+  update,
   getDetails
 }

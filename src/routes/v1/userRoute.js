@@ -4,11 +4,10 @@ import userValidation from '~/validations/userValidation'
 
 const router = express.Router()
 
+router.route('/').post(userValidation.create, userController.create)
+
 router
-  .route('/')
-
-  .post(userValidation.create, userController.create)
-
-router.route('/:id').get(userController.getDetails)
-// .put(userValidation.update, userController.update)
+  .route('/:id')
+  .get(userController.getDetails)
+  .put(userValidation.update, userController.update)
 export default router
