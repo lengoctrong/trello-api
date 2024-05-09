@@ -34,6 +34,19 @@ const create = async (data) => {
   }
 }
 
+const getDetails = async (id) => {
+  try {
+    const result = await userModel.findOneById(id)
+    if (!result) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'User not found')
+    }
+    return result
+  } catch (err) {
+    throw err
+  }
+}
+
 export default {
-  create
+  create,
+  getDetails
 }

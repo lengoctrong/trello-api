@@ -10,6 +10,16 @@ const create = async (req, res, next) => {
   }
 }
 
+const getDetails = async (req, res, next) => {
+  try {
+    const result = await userService.getDetails(req.params.id)
+    res.status(StatusCodes.OK).json(result)
+  } catch (err) {
+    next(err)
+  }
+}
+
 export default {
-  create
+  create,
+  getDetails
 }
