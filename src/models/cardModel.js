@@ -22,8 +22,8 @@ const collectionSchema = Joi.object({
   title: Joi.string().required().trim().strict(),
   description: Joi.string().optional(),
   taskTimer: Joi.object({
-    startDate: Joi.date().allow(null),
-    endDate: Joi.date().allow(null),
+    startDate: Joi.string().allow(null),
+    endDate: Joi.string().allow(null),
     status: Joi.string().allow(null)
   }).allow(null),
 
