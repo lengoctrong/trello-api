@@ -1,5 +1,6 @@
 import express from 'express'
 import { StatusCodes } from 'http-status-codes'
+import activityRoute from './activityRoute'
 import boardRoute from './boardRoute'
 import cardRoute from './cardRoute'
 import columnRoute from './columnRoute'
@@ -13,4 +14,5 @@ router.use('/boards', boardRoute)
 router.use('/columns', columnRoute)
 router.use('/cards', cardRoute)
 router.use('/users', userRoute)
+router.use('/activities', activityRoute)
 export default router
