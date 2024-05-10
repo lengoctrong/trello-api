@@ -14,6 +14,7 @@ const create = async (req, res, next) => {
       .pattern(OBJECT_ID_RULE)
       .message(OBJECT_ID_RULE_MESSAGE),
     title: Joi.string().required().trim().strict(),
+    description: Joi.string().allow(''),
     type: Joi.string().valid('getCardsByColumnId')
   })
   try {
@@ -31,7 +32,12 @@ const create = async (req, res, next) => {
 const update = async (req, res, next) => {
   const schema = Joi.object({
     title: Joi.string().trim().strict(),
-    description: Joi.string().trim().strict()
+    description: Joi.string().allow(''),
+    taskTimer: Joi.object({
+      startDate: Joi.string().allow(null),
+      endDate: Joi.string().allow(null),
+      status: Joi.string().allow(null)
+    }).allow(null)
   })
   try {
     await schema.validateAsync(req.body, {

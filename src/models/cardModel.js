@@ -21,6 +21,11 @@ const collectionSchema = Joi.object({
 
   title: Joi.string().required().trim().strict(),
   description: Joi.string().optional(),
+  taskTimer: Joi.object({
+    startDate: Joi.date().allow(null),
+    endDate: Joi.date().allow(null),
+    status: Joi.string().allow(null)
+  }).allow(null),
 
   createdAt: Joi.date().timestamp('javascript').default(Date.now),
   updatedAt: Joi.date().timestamp('javascript').default(null),
