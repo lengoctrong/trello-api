@@ -4,6 +4,15 @@ import db from '~/config/mongodb'
 const collectionName = 'activities'
 
 const create = async (data) => {
+  if (data.targetId || data.boardId) {
+    data.boardId = ObjectId.isValid(data.boardId)
+      ? new ObjectId(data.boardId)
+      : data.boardId
+    data.targetId = ObjectId.isValid(data.targetId)
+      ? new ObjectId(data.targetId)
+      : data.targetId
+  }
+
   try {
     return await db.get().collection(collectionName).insertOne(data)
   } catch (err) {
@@ -30,8 +39,30 @@ const findOneById = async (id) => {
   }
 }
 
+const findOneByTargetIdAndUpdate = async (targetId, updatedData) => {
+  try {
+    return await db
+      .get()
+      .collection(collectionName)
+      .findOneAndUpdate(
+        {
+          targetId: new ObjectId(targetId)
+        },
+        {
+          $set: updatedData
+        },
+        {
+          returnDocument: 'after'
+        }
+      )
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
 export default {
   create,
   getAll,
-  findOneById
+  findOneById,
+  findOneByTargetIdAndUpdate
 }

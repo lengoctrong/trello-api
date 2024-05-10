@@ -1,5 +1,6 @@
 import { StatusCodes } from 'http-status-codes'
 import { cloneDeep } from 'lodash'
+import activityModel from '~/models/activityModel'
 import boardModel from '~/models/boardModel'
 import cardModel from '~/models/cardModel'
 import columnModel from '~/models/columnModel'
@@ -95,6 +96,11 @@ const moveCardToDifferentColumn = async (data) => {
     })
 
     await cardModel.update(data.currentCardId, {
+      columnId: data.currentColumnId,
+      updatedAt: Date.now()
+    })
+
+    await activityModel.findOneByTargetIdAndUpdate(data.currentCardId, {
       columnId: data.currentColumnId,
       updatedAt: Date.now()
     })

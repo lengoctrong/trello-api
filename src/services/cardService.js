@@ -47,9 +47,22 @@ const updateAllCardsColumnId = async (columnId, data) => {
   }
 }
 
-const getAll = async (columnId) => {
+const getAllByColumnId = async (columnId) => {
   try {
     const result = await cardModel.findManyByColumnId(columnId)
+    if (!result) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'Cards not found')
+    }
+
+    return result
+  } catch (err) {
+    throw err
+  }
+}
+
+const getAllByBoardId = async (boardId) => {
+  try {
+    const result = await cardModel.findManyByBoardId(boardId)
     if (!result) {
       throw new ApiError(StatusCodes.NOT_FOUND, 'Cards not found')
     }
@@ -64,5 +77,6 @@ export default {
   create,
   update,
   updateAllCardsColumnId,
-  getAll
+  getAllByColumnId,
+  getAllByBoardId
 }

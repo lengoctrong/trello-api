@@ -12,8 +12,11 @@ const create = async (req, res, next) => {
 
 const getAll = async (req, res, next) => {
   try {
-    const { columnId } = req.query
-    const result = await cardService.getAll(columnId)
+    if (req.query.columnId) {
+      const result = await cardService.getAllByColumnId(req.query.columnId)
+      res.status(StatusCodes.OK).json(result)
+    }
+    const result = await cardService.getAllByBoardId(req.query.boardId)
     res.status(StatusCodes.OK).json(result)
   } catch (err) {
     next(err)

@@ -5,6 +5,8 @@ import ApiError from '~/utils/ApiError'
 const create = async (req, res, next) => {
   const schema = Joi.object({
     boardId: Joi.string().required(),
+    targetId: Joi.string().allow(''),
+    type: Joi.string().allow(''),
     content: Joi.string().required(),
     createdAt: Joi.date().timestamp('javascript').required()
   })

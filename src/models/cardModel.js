@@ -131,6 +131,20 @@ const findManyByColumnId = async (columnId) => {
   }
 }
 
+const findManyByBoardId = async (boardId) => {
+  try {
+    return await db
+      .get()
+      .collection(collectionName)
+      .find({
+        boardId: ObjectId.isValid(boardId) ? new ObjectId(boardId) : boardId
+      })
+      .toArray()
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
 const deleteManyByColumnId = async (columnId) => {
   try {
     return await db
@@ -173,5 +187,6 @@ export default {
   findOneById,
   deleteManyByColumnId,
   findManyByColumnId,
+  findManyByBoardId,
   updateManyByColumnId
 }
